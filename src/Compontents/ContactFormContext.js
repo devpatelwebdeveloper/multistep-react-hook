@@ -33,7 +33,9 @@ function formReducer(state, action) {
     case "SUBMISSION_RECEIVED":
       return { ...state, isSubmitLoading: false, isSubmissionReceived: true };
     case "RESET":
-      return { ...action.payload };
+      return {
+        ...initialState
+      };
 
     default:
       throw new Error();

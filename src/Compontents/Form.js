@@ -19,8 +19,11 @@ function useFormProgress() {
   function goBack() {
     setCurrentStep(currentStep - 1);
   }
+  function restart() {
+    setCurrentStep(0);
+  }
 
-  return [currentStep, goForward, goBack];
+  return [currentStep, goForward, goBack, restart];
 }
 
 export default function MultiForm() {
@@ -35,29 +38,10 @@ export default function MultiForm() {
     }, 1500);
   }
 
-  const [currentStep, goForward, goBack] = useFormProgress();
+  const [currentStep, goForward, goBack, restart] = useFormProgress();
   const isFirst = currentStep === 0;
 
   const isLast = currentStep === 6;
-
-  const initialState = {
-    FirstAnswer: "",
-    SecondAnswer: "",
-    ThirdAnswer: "",
-    FourthAnswer: "",
-    FifthAnswer: "",
-    SixthAnswer: "",
-    SeventhAnswer: "",
-    isSubmitLoading: false,
-    isSubmissionReceived: false
-  };
-
-  //Reset
-  const resetState = () => {
-    console.log(`clicked`);
-    dispatch({ type: "RESET", payload: initialState });
-    console.log(state);
-  };
 
   const steps = [
     <StepOne moveNext={isLast ? handleSubmit : goForward} />,
@@ -69,6 +53,11 @@ export default function MultiForm() {
     <StepSeventh moveNext={isLast ? handleSubmit : goForward} />
   ];
 
+  //Reset
+  const resetState = () => {
+    dispatch({ type: "RESET" });
+    restart();
+  };
   //Submission in progress
   if (state.isSubmitLoading) {
     return (
@@ -86,22 +75,18 @@ export default function MultiForm() {
         <pre style={{ textAlign: "left" }}>
           {JSON.stringify(state, null, 2)}
         </pre>
-        <button
-          onClick={() => {
-            resetState();
-          }}
-        >
-          Start Over
-        </button>
+        <button onClick={resetState}>Start Over</button>
       </>
     );
   }
   return (
     <>
+      {JSON.stringify(state, null, 2)}
       <div>
         {steps[currentStep]}
+
         <div>
-          {!isFirst && <button onClick={() => goBack()}>Go Back</button>}
+          {!isFirst && <button onClick={goBack}>Go Back</button>}
           {/* Step Buttons Starts */}
           {/* <button
             type="submit"

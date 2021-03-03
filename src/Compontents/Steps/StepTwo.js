@@ -25,7 +25,7 @@ export function StepTwo({ moveNext }) {
 
   const handleOnclick = (value) => {
     dispatch({ type: "SECOND_ANSWER", payload: value });
-    // moveNext()
+    moveNext();
   };
 
   return (

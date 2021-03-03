@@ -25,7 +25,7 @@ export function StepThree({ moveNext }) {
 
   const handleOnclick = (value) => {
     dispatch({ type: "THIRD_ANSWER", payload: value });
-    // moveNext()
+    moveNext();
   };
 
   return (

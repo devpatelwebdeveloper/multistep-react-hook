@@ -2,9 +2,9 @@ import React from "react";
 import { useContactFormState } from "../ContactFormContext";
 import "./Steps.css";
 
-export function StepOne({ moveNext }) {
+export function StepSixth({ moveNext }) {
   const {
-    state: { FirstAnswer },
+    state: { SixthAnswer },
     dispatch
   } = useContactFormState();
 
@@ -24,7 +24,7 @@ export function StepOne({ moveNext }) {
   ];
 
   const handleOnclick = (value) => {
-    dispatch({ type: "FIRST_ANSWER", payload: value });
+    dispatch({ type: "SIXTH_ANSWER", payload: value });
     moveNext();
   };
 
@@ -36,14 +36,14 @@ export function StepOne({ moveNext }) {
           <h2>
             You get customer approval on an estimate before you send an invoice.
           </h2>
-          <p>first answer = {FirstAnswer}</p>
+          <p>first answer = {SixthAnswer}</p>
         </div>
         <div className="options">
           {Options.map((opt) => {
             return (
               <div
                 className={`single-option ${
-                  FirstAnswer === opt.value ? "selected-option" : ""
+                  SixthAnswer === opt.value ? "selected-option" : ""
                 }`}
                 onClick={() => {
                   handleOnclick(opt.value);

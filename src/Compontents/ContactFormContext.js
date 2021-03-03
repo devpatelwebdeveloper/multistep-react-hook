@@ -1,5 +1,16 @@
 import React, { createContext, useReducer, useContext } from "react";
 
+const initialState = {
+  FirstAnswer: "",
+  SecondAnswer: "",
+  ThirdAnswer: "",
+  FourthAnswer: "",
+  FifthAnswer: "",
+  SixthAnswer: "",
+  SeventhAnswer: "",
+  isSubmitLoading: false,
+  isSubmissionReceived: false
+};
 function formReducer(state, action) {
   switch (action.type) {
     case "FIRST_ANSWER":
@@ -21,24 +32,15 @@ function formReducer(state, action) {
       return { ...state, isSubmitLoading: true };
     case "SUBMISSION_RECEIVED":
       return { ...state, isSubmitLoading: false, isSubmissionReceived: true };
+    case "RESET":
+      return { ...action.payload };
+
     default:
       throw new Error();
   }
 }
 
 const ContactFormContext = createContext();
-
-const initialState = {
-  FirstAnswer: "",
-  SecondAnswer: "",
-  ThirdAnswer: "",
-  FourthAnswer: "",
-  FifthAnswer: "",
-  SixthAnswer: "",
-  SeventhAnswer: "",
-  isSubmitLoading: false,
-  isSubmissionReceived: false
-};
 
 export const ContactFormProvider = function ({ children }) {
   const [state, dispatch] = useReducer(formReducer, initialState);

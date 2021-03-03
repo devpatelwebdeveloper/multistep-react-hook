@@ -25,6 +25,7 @@ function useFormProgress() {
 
 export default function MultiForm() {
   const { dispatch, state } = useContactFormState();
+
   function handleSubmit() {
     dispatch({ type: "SUBMIT" });
 
@@ -36,7 +37,27 @@ export default function MultiForm() {
 
   const [currentStep, goForward, goBack] = useFormProgress();
   const isFirst = currentStep === 0;
+
   const isLast = currentStep === 6;
+
+  const initialState = {
+    FirstAnswer: "",
+    SecondAnswer: "",
+    ThirdAnswer: "",
+    FourthAnswer: "",
+    FifthAnswer: "",
+    SixthAnswer: "",
+    SeventhAnswer: "",
+    isSubmitLoading: false,
+    isSubmissionReceived: false
+  };
+
+  //Reset
+  const resetState = () => {
+    console.log(`clicked`);
+    dispatch({ type: "RESET", payload: initialState });
+    console.log(state);
+  };
 
   const steps = [
     <StepOne moveNext={isLast ? handleSubmit : goForward} />,
@@ -47,8 +68,6 @@ export default function MultiForm() {
     <StepSixth moveNext={isLast ? handleSubmit : goForward} />,
     <StepSeventh moveNext={isLast ? handleSubmit : goForward} />
   ];
-  // const isFirst = currentStep === 0;
-  // const isLast = currentStep === steps.length - 1;
 
   //Submission in progress
   if (state.isSubmitLoading) {
@@ -67,11 +86,16 @@ export default function MultiForm() {
         <pre style={{ textAlign: "left" }}>
           {JSON.stringify(state, null, 2)}
         </pre>
-        <button>Start Over</button>
+        <button
+          onClick={() => {
+            resetState();
+          }}
+        >
+          Start Over
+        </button>
       </>
     );
   }
-
   return (
     <>
       <div>

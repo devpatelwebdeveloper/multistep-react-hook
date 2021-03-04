@@ -87,9 +87,11 @@ export default function MultiForm() {
       if (state.FifthAnswer === "yes" || state.SixthAnswer === "yes") {
         console.log("I am at essentials");
         setRecommendation("essentials");
+        doAnswerEssentials();
       } else {
         console.log("I am at easy start");
         setRecommendation("easystart");
+        doAnswerEasyStart();
       }
     }
     if (
@@ -103,6 +105,7 @@ export default function MultiForm() {
     )
       console.log("I am at selfemployed");
     setRecommendation("selfemployed");
+    doAnswerSelfEmployed();
   };
   const checkAnswer = () => {
     if (
@@ -120,6 +123,8 @@ export default function MultiForm() {
   useEffect(() => {
     if (state.isSubmitLoading) {
       checkAnswer();
+    } else {
+      console.log(`its not working`);
     }
   });
 
@@ -137,7 +142,12 @@ export default function MultiForm() {
     return (
       <>
         <h1>Thanks for your submission!</h1>
-        {showRecommendation && <h2>This is title: {productTitle}</h2>}
+        {showRecommendation && (
+          <>
+            <h2>This is Recommendation: {recommendation}</h2>
+            <h2>This is Title: {productTitle}</h2>
+          </>
+        )}
         <pre style={{ textAlign: "left" }}>
           {JSON.stringify(state, null, 2)}
         </pre>
@@ -155,6 +165,10 @@ export default function MultiForm() {
           Step {currentStep + 1} of {steps.length}
         </div>
       </div>
+      <>
+        <h2>This is Initial Recommendation: {recommendation}</h2>
+        <h2>This is Initial Title: {productTitle}</h2>
+      </>
     </>
   );
 }

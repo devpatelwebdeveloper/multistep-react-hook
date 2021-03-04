@@ -8,20 +8,25 @@ export function StepFour({ moveNext }) {
     dispatch
   } = useContactFormState();
 
-  const Options = [
-    {
-      title: "I want to prepare estimates in QuickBooks",
-      value: "yes"
-    },
-    {
-      title: "I only send invoices",
-      value: "No"
-    },
-    {
-      title: "I don’t use estimates or invoices",
-      value: "N/A"
-    }
-  ];
+  const Step = {
+    question: "Do you want to connect QuickBooks to other apps?",
+    subtitle:
+      "Sync with apps like PayPal, Shopify, and Square to bring all your data together.",
+    Options: [
+      {
+        title: "I want to QuickBooks to sync with other apps",
+        value: "yes"
+      },
+      {
+        title: "I don’t need to sync QuickBooks with other apps",
+        value: "No"
+      },
+      {
+        title: "I'm not sure",
+        value: "NA"
+      }
+    ]
+  };
 
   const handleOnclick = (value) => {
     dispatch({ type: "FOURTH_ANSWER", payload: value });
@@ -32,14 +37,11 @@ export function StepFour({ moveNext }) {
     <>
       <div className="question-slide">
         <div className="questions">
-          <h1>Do you send estimates to your customers?</h1>
-          <h2>
-            You get customer approval on an estimate before you send an invoice.
-          </h2>
-          <p>first answer = {FourthAnswer}</p>
+          <h1>{Step.question}</h1>
+          <h2>{Step.subtitle}</h2>
         </div>
         <div className="options">
-          {Options.map((opt) => {
+          {Step.Options.map((opt) => {
             return (
               <div
                 className={`single-option ${
@@ -49,7 +51,8 @@ export function StepFour({ moveNext }) {
                   handleOnclick(opt.value);
                 }}
               >
-                {opt.title}
+                {opt.value !== "NA" && <div>{opt.value}</div>}
+                <div>{opt.title}</div>
               </div>
             );
           })}

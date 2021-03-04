@@ -8,20 +8,25 @@ export function StepSixth({ moveNext }) {
     dispatch
   } = useContactFormState();
 
-  const Options = [
-    {
-      title: "I want to prepare estimates in QuickBooks",
-      value: "yes"
-    },
-    {
-      title: "I only send invoices",
-      value: "No"
-    },
-    {
-      title: "I don’t use estimates or invoices",
-      value: "N/A"
-    }
-  ];
+  const Step = {
+    question: "Do you need to manage recurring bills and invoices?",
+    subtitle:
+      "Save time and hassle by making recurring transactions automatic.",
+    Options: [
+      {
+        title: "I pay recurring bills",
+        value: "yes"
+      },
+      {
+        title: "This doesn’t apply to my business",
+        value: "No"
+      }
+      // {
+      //   title: "I don’t use estimates or invoices",
+      //   value: "NA"
+      // }
+    ]
+  };
 
   const handleOnclick = (value) => {
     dispatch({ type: "SIXTH_ANSWER", payload: value });
@@ -32,14 +37,11 @@ export function StepSixth({ moveNext }) {
     <>
       <div className="question-slide">
         <div className="questions">
-          <h1>Do you send estimates to your customers?</h1>
-          <h2>
-            You get customer approval on an estimate before you send an invoice.
-          </h2>
-          <p>first answer = {SixthAnswer}</p>
+          <h1>{Step.question}</h1>
+          <h2>{Step.subtitle}</h2>
         </div>
         <div className="options">
-          {Options.map((opt) => {
+          {Step.Options.map((opt) => {
             return (
               <div
                 className={`single-option ${
@@ -49,7 +51,8 @@ export function StepSixth({ moveNext }) {
                   handleOnclick(opt.value);
                 }}
               >
-                {opt.title}
+                {opt.value !== "NA" && <div>{opt.value}</div>}
+                <div>{opt.title}</div>
               </div>
             );
           })}

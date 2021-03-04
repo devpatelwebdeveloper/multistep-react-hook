@@ -8,20 +8,25 @@ export function StepThree({ moveNext }) {
     dispatch
   } = useContactFormState();
 
-  const Options = [
-    {
-      title: "Question 2 I want to prepare estimates in QuickBooks",
-      value: "yes"
-    },
-    {
-      title: "Question 2 I only send invoices",
-      value: "No"
-    },
-    {
-      title: "Question 2 I don’t use estimates or invoices",
-      value: "N/A"
-    }
-  ];
+  const Step = {
+    question: "Is your business a corporation or sole proprietorship?",
+    subtitle:
+      "If you’re a sole proprietor, you’re the sole owner of your business. If you’re incorporated, your business operates as its own legal entity.",
+    Options: [
+      {
+        title: "My business is incorporated",
+        value: "yes"
+      },
+      {
+        title: "My business is a sole proprietorship",
+        value: "No"
+      },
+      {
+        title: "I'm not sure'",
+        value: "NA"
+      }
+    ]
+  };
 
   const handleOnclick = (value) => {
     dispatch({ type: "THIRD_ANSWER", payload: value });
@@ -32,14 +37,11 @@ export function StepThree({ moveNext }) {
     <>
       <div className="question-slide">
         <div className="questions">
-          <h1>Do you send estimates to your customers?</h1>
-          <h2>
-            You get customer approval on an estimate before you send an invoice.
-          </h2>
-          <p>first answer = {ThirdAnswer}</p>
+          <h1>{Step.question}</h1>
+          <h2>{Step.subtitle}</h2>
         </div>
         <div className="options">
-          {Options.map((opt) => {
+          {Step.Options.map((opt) => {
             return (
               <div
                 className={`single-option ${
@@ -49,7 +51,8 @@ export function StepThree({ moveNext }) {
                   handleOnclick(opt.value);
                 }}
               >
-                {opt.title}
+                {opt.value !== "NA" && <div>{opt.value}</div>}
+                <div>{opt.title}</div>
               </div>
             );
           })}

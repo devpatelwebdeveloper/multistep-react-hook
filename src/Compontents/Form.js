@@ -40,7 +40,6 @@ export default function MultiForm() {
 
   const [currentStep, goForward, goBack, restart] = useFormProgress();
   const isFirst = currentStep === 0;
-
   const isLast = currentStep === 6;
 
   const steps = [
@@ -81,7 +80,7 @@ export default function MultiForm() {
   }
   return (
     <>
-      {JSON.stringify(state, null, 2)}
+      {/* {JSON.stringify(state, null, 2)} */}
       <div>
         {steps[currentStep]}
 

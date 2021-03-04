@@ -29,7 +29,7 @@ function useFormProgress() {
 export default function MultiForm() {
   const [recommendation, setRecommendation] = useState("easystart");
   const [showRecommendation, setShowRecommendation] = useState(false);
-  const [productTitle, setProductTitle] = useState("");
+  const [productTitle, setProductTitle] = useState("easystart");
   const { dispatch, state } = useContactFormState();
 
   // Simulated network request :)
@@ -80,18 +80,12 @@ export default function MultiForm() {
   // Check the Answer
   const showAnswer = () => {
     if (state.SeventhAnswer === "yes") {
-      console.log("I am at plus");
       setRecommendation("plus");
-      doAnswerPlus();
     } else {
       if (state.FifthAnswer === "yes" || state.SixthAnswer === "yes") {
-        console.log("I am at essentials");
         setRecommendation("essentials");
-        doAnswerEssentials();
       } else {
-        console.log("I am at easy start");
         setRecommendation("easystart");
-        doAnswerEasyStart();
       }
     }
     if (
@@ -102,10 +96,26 @@ export default function MultiForm() {
       state.FifthAnswer === "No" &&
       state.SixthAnswer === "No" &&
       state.SeventhAnswer === "No"
-    )
-      console.log("I am at selfemployed");
-    setRecommendation("selfemployed");
-    doAnswerSelfEmployed();
+    ) {
+      setRecommendation("selfemployed");
+    }
+    switch (recommendation) {
+      case "easystart":
+        doAnswerEasyStart();
+        break;
+      case "essentials":
+        doAnswerEssentials();
+        break;
+      case "plus":
+        doAnswerPlus();
+        break;
+      case "selfemployed":
+        doAnswerSelfEmployed();
+        break;
+      default:
+        doAnswerEasyStart();
+        break;
+    }
   };
   const checkAnswer = () => {
     if (
@@ -123,8 +133,6 @@ export default function MultiForm() {
   useEffect(() => {
     if (state.isSubmitLoading) {
       checkAnswer();
-    } else {
-      console.log(`its not working`);
     }
   });
 

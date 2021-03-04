@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StepOne } from "./Steps/StepOne";
 import { StepTwo } from "./Steps/StepTwo";
 import { StepThree } from "./Steps/StepThree";
@@ -27,12 +27,14 @@ function useFormProgress() {
 }
 
 export default function MultiForm() {
+  const [recommendation, setRecommendation] = useState("easystart");
+  const [showRecommendation, setShowRecommendation] = useState(false);
+  const [productTitle, setProductTitle] = useState("");
   const { dispatch, state } = useContactFormState();
 
+  // Simulated network request :)
   function handleSubmit() {
     dispatch({ type: "SUBMIT" });
-
-    // Simulated network request :)
     setTimeout(() => {
       dispatch({ type: "SUBMISSION_RECEIVED" });
     }, 1500);
@@ -41,7 +43,6 @@ export default function MultiForm() {
   const [currentStep, goForward, goBack, restart] = useFormProgress();
   const isFirst = currentStep === 0;
   const isLast = currentStep === 6;
-
   const steps = [
     <StepOne moveNext={isLast ? handleSubmit : goForward} />,
     <StepTwo moveNext={isLast ? handleSubmit : goForward} />,
@@ -57,6 +58,71 @@ export default function MultiForm() {
     dispatch({ type: "RESET" });
     restart();
   };
+
+  //Set package
+  const doAnswerEasyStart = () => {
+    setProductTitle("EASY START");
+    setShowRecommendation(true);
+  };
+  const doAnswerEssentials = () => {
+    setProductTitle("ESSENTIALS");
+    setShowRecommendation(true);
+  };
+  const doAnswerPlus = () => {
+    setProductTitle("PLUS");
+    setShowRecommendation(true);
+  };
+  const doAnswerSelfEmployed = () => {
+    setProductTitle("SELF EMPLOYED");
+    setShowRecommendation(true);
+  };
+
+  // Check the Answer
+  const showAnswer = () => {
+    if (state.SeventhAnswer === "yes") {
+      console.log("I am at plus");
+      setRecommendation("plus");
+      doAnswerPlus();
+    } else {
+      if (state.FifthAnswer === "yes" || state.SixthAnswer === "yes") {
+        console.log("I am at essentials");
+        setRecommendation("essentials");
+      } else {
+        console.log("I am at easy start");
+        setRecommendation("easystart");
+      }
+    }
+    if (
+      state.FirstAnswer === "No" &&
+      state.SecondAnswer === "No" &&
+      state.ThirdAnswer === "No" &&
+      state.FourthAnswer === "No" &&
+      state.FifthAnswer === "No" &&
+      state.SixthAnswer === "No" &&
+      state.SeventhAnswer === "No"
+    )
+      console.log("I am at selfemployed");
+    setRecommendation("selfemployed");
+  };
+  const checkAnswer = () => {
+    if (
+      state.FirstAnswer !== "" &&
+      state.SecondAnswer !== "" &&
+      state.ThirdAnswer !== "" &&
+      state.FourthAnswer !== "" &&
+      state.FifthAnswer !== "" &&
+      state.SixthAnswer !== "" &&
+      state.SeventhAnswer !== ""
+    )
+      showAnswer();
+  };
+
+  useEffect(() => {
+    if (state.isSubmitLoading) {
+      checkAnswer();
+    }
+  });
+
   //Submission in progress
   if (state.isSubmitLoading) {
     return (
@@ -71,6 +137,7 @@ export default function MultiForm() {
     return (
       <>
         <h1>Thanks for your submission!</h1>
+        {showRecommendation && <h2>This is title: {productTitle}</h2>}
         <pre style={{ textAlign: "left" }}>
           {JSON.stringify(state, null, 2)}
         </pre>
@@ -83,26 +150,7 @@ export default function MultiForm() {
       {/* {JSON.stringify(state, null, 2)} */}
       <div>
         {steps[currentStep]}
-
-        <div>
-          {!isFirst && <button onClick={goBack}>Go Back</button>}
-          {/* Step Buttons Starts */}
-          {/* <button
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-
-              if (isLast) {
-                handleSubmit();
-              } else {
-                goForward();
-              }
-            }}
-          >
-            {isLast ? "Submit" : "Next"}
-          </button> */}
-          {/* Step Buttons Ends */}
-        </div>
+        <div>{!isFirst && <button onClick={goBack}>Go Back</button>}</div>
         <div>
           Step {currentStep + 1} of {steps.length}
         </div>
